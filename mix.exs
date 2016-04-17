@@ -3,7 +3,7 @@ defmodule UserAgentParser.Mixfile do
 
   def project do
     [app: :user_agent_parser,
-     version: "0.0.1",
+     version: "1.0.0",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
