@@ -7,7 +7,10 @@ defmodule UserAgentParser.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+     deps: deps,
+     # Hex
+     description: description,
+     package: package]
   end
 
   # Configuration for the OTP application
