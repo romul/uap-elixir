@@ -29,4 +29,18 @@ defmodule UserAgentParser.Mixfile do
   defp deps do
     []
   end
+
+  defp description do
+    """
+    A simple Elixir package for parsing user agent strings with the help of BrowserScope's UA database
+    """
+  end
+
+  defp package do
+    [# These are the default files included in the package
+     files: ["lib", "config", "mix.exs", "README.md", "vendor/uap-core/regexes.yaml"],
+     maintainers: ["Roman Smirnov"],
+     licenses: ["MIT"],
+     links: %{"GitHub" => "https://github.com/romul/uap-elixir"}]
+  end
 end
