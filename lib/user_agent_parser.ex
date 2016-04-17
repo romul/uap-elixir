@@ -71,40 +71,20 @@ defmodule UserAgentParser do
 
   defp parse_device(_, nil), do: :unknown
   defp parse_device(ua, parser) do
-    device_replacement = parser[:device_replacement]
-    brand_replacement = parser[:brand_replacement]
-    model_replacement = parser[:model_replacement]
-    case Regex.run(parser[:regex], ua) do
-      [_, device, brand, model] ->
-        substitutions = [{"$1", device}, {"$2", brand}, {"$3", model}]
-        %UA.Device{
-          name: make_substitutions(device_replacement, substitutions),
-          brand: make_substitutions(brand_replacement, substitutions),
-          model: make_substitutions(model_replacement, substitutions)
-        }
-      [_, device, brand] ->
-        substitutions = [{"$1", device}, {"$2", brand}]
-        %UA.Device{
-          name: make_substitutions(device_replacement, substitutions),
-          brand: make_substitutions(brand_replacement, substitutions),
-          model: (model_replacement || :unknown)
-        }
-      [_, device] ->
-        substitutions = [{"$1", device}]
-        %UA.Device{
-          name: make_substitutions(device_replacement, substitutions),
-          brand: (brand_replacement || :unknown),
-          model: (model_replacement || :unknown)
-        }
-      [_] ->
-        %UA.Device{
-          name:  (device_replacement || :unknown),
-          brand: (brand_replacement  || :unknown),
-          model: (model_replacement  || :unknown)
-        }
+    substitutions = case Regex.run(parser[:regex], ua) do
+      [_, device, brand, model] -> [{"$1", device}, {"$2", brand}, {"$3", model}]
+      [_, device, brand] -> [{"$1", device}, {"$2", brand}]
+      [_, device] -> [{"$1", device}]
+      [_] -> []
     end
+    %UA.Device{
+      name: make_substitutions(parser[:device_replacement], substitutions),
+      brand: make_substitutions(parser[:brand_replacement], substitutions),
+      model: make_substitutions(parser[:model_replacement], substitutions)
+    }
   end
 
+  defp make_substitutions(:unknown, _), do: :unknown
   defp make_substitutions(string, substitutions) do
     substitutions |> Enum.reduce(string, fn({k, v}, string) ->
       String.replace(string, k, v)
